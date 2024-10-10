@@ -1,0 +1,99 @@
+---
+- name: Install Nexus Repository Manager on EC2
+  hosts: all
+  become: yes
+  vars:
+    nexus_version: "3.38.1-01"  # Replace with the desired version
+    nexus_user: "nexus"
+    nexus_home: "/opt/nexus"
+    nexus_data: "/opt/sonatype-work"
+    nexus_service: "/etc/systemd/system/nexus.service"
+  
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install dependencies (Java)
+      apt:
+        name: openjdk-11-jdk
+        state: present
+    
+    - name: Create nexus user
+      user:
+        name: "{{ nexus_user }}"
+        shell: /bin/bash
+        home: "{{ nexus_home }}"
+        create_home: no
+
+    - name: Download Nexus Repository Manager
+      get_url:
+        url: "https://download.sonatype.com/nexus/3/nexus-{{ nexus_version }}-unix.tar.gz"
+        dest: /tmp/nexus.tar.gz
+    
+    - name: Extract Nexus Repository Manager
+      unarchive:
+        src: /tmp/nexus.tar.gz
+        dest: /opt
+        remote_src: yes
+
+    - name: Rename extracted folder to 'nexus'
+      command: mv /opt/nexus-{{ nexus_version }} "{{ nexus_home }}"
+
+    - name: Set permissions on Nexus directories
+      file:
+        path: "{{ item }}"
+        owner: "{{ nexus_user }}"
+        group: "{{ nexus_user }}"
+        recurse: yes
+      loop:
+        - "{{ nexus_home }}"
+        - "{{ nexus_data }}"
+
+    - name: Configure Nexus to run as nexus user
+      lineinfile:
+        path: "{{ nexus_home }}/bin/nexus.rc"
+        line: 'run_as_user="{{ nexus_user }}"'
+        create: yes
+
+    - name: Set up Nexus as a systemd service
+      copy:
+        dest: "{{ nexus_service }}"
+        content: |
+          [Unit]
+          Description=nexus service
+          After=network.target
+
+          [Service]
+          Type=forking
+          LimitNOFILE=65536
+          User={{ nexus_user }}
+          Group={{ nexus_user }}
+          ExecStart={{ nexus_home }}/bin/nexus start
+          ExecStop={{ nexus_home }}/bin/nexus stop
+          ExecReload=/bin/kill -HUP $MAINPID
+          Restart=on-failure
+          RestartSec=5
+          TimeoutSec=600
+
+          [Install]
+          WantedBy=multi-user.target
+
+    - name: Reload systemd and enable Nexus service
+      systemd:
+        daemon_reload: yes
+        name: nexus
+        enabled: yes
+        state: started
+
+    - name: Open Nexus port (8081) in firewall
+      ufw:
+        rule: allow
+        port: '8081'
+        proto: tcp
+        comment: Allow Nexus service access
+
+    - name: Ensure Nexus is started and running
+      systemd:
+        name: nexus
+        state: started
