@@ -16,5 +16,5 @@ RUN pip install --upgrade pip && \
 # Set up a working directory
 WORKDIR /ansible
 
-# Default command to run Ansible --version
+
 CMD ["ansible", "--version"]

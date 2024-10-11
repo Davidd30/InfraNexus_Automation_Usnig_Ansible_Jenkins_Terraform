@@ -1,9 +1,9 @@
 ---
 - name: Install Nexus Repository Manager on EC2
   hosts: all
-  become: yes
+  become: true
   vars:
-    nexus_version: "3.38.1-01"  # Replace with the desired version
+    nexus_version: "3.38.1-01" 
     nexus_user: "nexus"
     nexus_home: "/opt/nexus"
     nexus_data: "/opt/sonatype-work"

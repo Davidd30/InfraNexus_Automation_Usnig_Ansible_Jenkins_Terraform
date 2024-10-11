@@ -25,7 +25,7 @@ output "instance_public_ip" {
 
 output "inventory_file" {
   description = "Ansible inventory file content"
-  value       = <<EOT
+  value       = <<EOF
       echo -e "[EC2] \n${aws_instance.David_EC2.public_ip}" >> inventory.ini
-      EOT
+      EOF
 }
