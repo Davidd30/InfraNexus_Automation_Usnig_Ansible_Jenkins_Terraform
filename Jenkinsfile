@@ -1,4 +1,4 @@
-Pipeline{
+pipeline{
     agent none
     stages {
         stage ("Cloning and terraform init"){
