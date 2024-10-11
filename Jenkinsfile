@@ -25,9 +25,9 @@ Pipeline{
                 git push origin main
                 cd terraform
                 """
-             }
+                }
+            }
         }
-
         stage('ansible configration') {
             agent {
                 docker {
@@ -44,13 +44,8 @@ Pipeline{
                 chmod 400 key.pem
                 ansible-playbook Main_playbook.yaml -i ../terraform/inventory.txt --private-key key.pem --ssh-extra-args '-o StrictHostKeyChecking=no'
                 """
-             }
-                
+                }
             }
         }
-
-
-
-
     }
 }

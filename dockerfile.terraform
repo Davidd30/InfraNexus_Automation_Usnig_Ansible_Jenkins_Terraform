@@ -36,5 +36,4 @@ RUN git config --global user.name "David Nabil" && \
 # Set the working directory (optional, adjust to your needs)
 WORKDIR /workspace
 
-# Set the entrypoint or default command (optional, adjust as needed)
 # ENTRYPOINT ["/bin/bash"]
