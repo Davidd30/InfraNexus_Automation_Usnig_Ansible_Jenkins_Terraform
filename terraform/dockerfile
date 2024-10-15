@@ -20,8 +20,8 @@ RUN curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add - && \
 # Create a directory for the agent's data (this is where SSH keys will be stored)
 
 # Copy SSH keys from agents_data/.ssh (assuming you'll mount this directory when running the container)
-COPY agents_data/.ssh /root/.ssh
-COPY agents_data/.aws /root/.aws
+# COPY agents_data/.ssh /root/.ssh
+# COPY agents_data/.aws /root/.aws
 # Ensure proper permissions for SSH keys
 RUN chmod 700 /root/.ssh && \
     chmod 600 /root/.ssh/*
