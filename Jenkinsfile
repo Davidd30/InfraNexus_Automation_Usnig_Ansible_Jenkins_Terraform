@@ -31,7 +31,7 @@ pipeline{
         stage('ansible configration') {
             agent {
                 docker {
-                    image 'ansbible-agent'
+                    image 'ansible-agent'
                     args '-v /var/run/docker.sock:/var/run/docker.sock' 
                 }
             }
@@ -42,7 +42,7 @@ pipeline{
                 git clone https://github.com/Davidd30/InfraNexus_Automation_Usnig_Ansible_Jenkins_Terraform.git
                 cd InfraNexus_Automation_Usnig_Ansible_Jenkins_Terraform/ansible
                 chmod 400 key.pem
-                ansible-playbook Main_playbook.yaml -i ../terraform/inventory.txt --private-key key.pem --ssh-extra-args '-o StrictHostKeyChecking=no'
+                ansible-playbook Main_playbook.yaml -i ../terraform/inventory.txt --private-key key.pem --ssh-extra-args
                 """
                 }
             }
