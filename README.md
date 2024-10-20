@@ -40,7 +40,7 @@ This project automates infrastructure deployment using **Ansible**, **Jenkins**,
 2. **Deploy Configurations**:
    Use Ansible playbooks to configure the provisioned resources:
    ```bash
-   ansible-playbook playbook.yml
+   ansible-playbook Main_playbook.yaml
    ```
 
 3. **Run Jenkins CI/CD Pipeline**:
