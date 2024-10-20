@@ -1,4 +1,4 @@
-# InfraNexus_Automation_Usnig_Ansible_Jenkins_Terraform
+# InfraNexus_Automation_Using_Ansible_Jenkins_Terraform
 ## Overview
 
 This project automates infrastructure deployment using **Ansible**, **Jenkins**, and **Terraform** to install and configure a Nexus Repository Manager. It handles provisioning, configuration management, and CI/CD processes to support infrastructure as code (IaC) practices.
